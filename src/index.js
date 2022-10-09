@@ -84,3 +84,29 @@ function alertNoImagesFound() {
 function alertEndOfSearch() {
   Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.")
 }
+
+function sendForm() {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', document.forms.search-form.action);
+    xhr.responseType = 'json';
+    xhr.onload = () => {
+      document.forms.search-form.querySelector('[type="submit"]').disabled = false;
+      document.forms.search-form.querySelector('.submit-spinner').classList.add('submit-spinner_hide');
+      if (xhr.status !== 200) {
+        return;
+      }
+      const response = xhr.response;
+    }
+    xhr.onerror = () => {
+      document.forms.search-form.querySelector('[type="submit"]').disabled = false;
+      document.forms.search-form.querySelector('.submit-spinner').classList.add('submit-spinner_hide');
+    };
+    document.forms.search-form.querySelector('[type="submit"]').disabled = true;
+    document.forms.search-form.querySelector('.submit-spinner').classList.remove('submit-spinner_hide');
+    xhr.send(new FormData(document.forms.search-form));
+  }
+  // при отправке формы
+  document.forms.search-form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    sendForm();
+  });
